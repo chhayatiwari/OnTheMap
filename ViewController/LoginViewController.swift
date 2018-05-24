@@ -29,7 +29,7 @@ class LoginViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         if (UserDefaults.standard.string(forKey: Student.StudentParameterKey.Id)) != nil {
-            completeLogin()
+           completeLogin()
         }
         else
         {
@@ -67,6 +67,7 @@ class LoginViewController: UIViewController {
     }
     
     private func getSessionId() {
+        
         var request = URLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -75,7 +76,7 @@ class LoginViewController: UIViewController {
         
         let task = appDelegate.sharedSession.dataTask(with: request) { data, response, error in
             
-            func displayError(_ error: String, debugLabelText: String? = nil) {
+            func displayError(error: String, debugLabelText: String? = nil) {
                 performUIUpdatesOnMain {
                     self.setUIEnabled(true)
                     self.labelView.text = error
@@ -84,54 +85,52 @@ class LoginViewController: UIViewController {
             
             /* GUARD: Was there an error? */
             guard (error == nil) else {
-                displayError("There was an error with your request: \(error!)")
+                displayError(error: "Error with Login")
                 return
             }
             
             /* GUARD: Did we get a successful 2XX response? */
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-                displayError("Your request returned a status code other than 2xx!")
+                displayError(error: "Error with the Login Credentials")
                 return
             }
             
             /* GUARD: Was there any data returned? */
             guard let data = data else {
-                displayError("No data was returned by the request!")
+                displayError(error: "No data found")
                 return
             }
             
             /* 5. Parse the data */
             let range = Range(5..<data.count)
             let newData = data.subdata(in: range) /* subset response data! */
-           // print(String(data: newData, encoding: .utf8)!)
-            
+           
             let parsedResult: [String:AnyObject]!
             do {
                 parsedResult = try JSONSerialization.jsonObject(with: newData, options: .allowFragments) as! [String:AnyObject]
-                print("parsed\(parsedResult)")
             } catch {
                 print("Could not parse the data as JSON: '\(data)'")
                 return
             }
             guard let account = parsedResult[Student.StudentParameterKey.Account] as? [String: AnyObject] else {
-                displayError("No such value corresponds to account")
+                displayError(error: "No account found")
                 return
             }
             guard let key = account[Student.StudentParameterKey.UniqueId] as? String else {
-                displayError("No such key")
+                displayError(error: "NO key to account")
                 return
             }
             guard let session = parsedResult[Student.StudentParameterKey.Session] as? [String: AnyObject] else {
-                displayError("No such value corresponds to session")
+                displayError(error: "No session")
                 return
             }
             guard let sessionID = session[Student.StudentParameterKey.Id] as? String else {
-                displayError("No such sessionId")
+                displayError(error: "No session Id")
                 return
             }
             UserDefaults.standard.set(sessionID, forKey:Student.StudentParameterKey.Id )
             UserDefaults.standard.set(key, forKey:Student.StudentParameterKey.UniqueId )
-            print(UserDefaults.standard.string(forKey: Student.StudentParameterKey.UniqueId)!)
+            print(UserDefaults.standard.string(forKey: Student.StudentParameterKey.Id)!)
             self.completeLogin()
         }
         task.resume()

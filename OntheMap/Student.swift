@@ -14,6 +14,7 @@ struct Student {
         static let APIScheme = "https"
         static let APIHost = "parse.udacity.com"
         static let APIPath = "/parse/classes/StudentLocation"
+        static let uniqueKey = "98765"
     }
     
     

@@ -77,7 +77,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pG1-6Z-Kne">
                                         <rect key="frame" x="0.0" y="164" width="280" height="384"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
+                                        <color key="textColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -256,8 +256,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="gBJ-pf-ESm">
-                                <rect key="frame" x="0.0" y="0.0" width="304" height="568"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="gBJ-pf-ESm">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9ox-oK-0ip">
                                 <rect key="frame" x="124" y="506" width="72" height="42"/>
@@ -273,11 +273,11 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="9ox-oK-0ip" firstAttribute="leading" secondItem="iAf-qM-afm" secondAttribute="leadingMargin" constant="108" id="GBv-Ax-YG4"/>
-                            <constraint firstItem="gBJ-pf-ESm" firstAttribute="leading" secondItem="iAf-qM-afm" secondAttribute="leadingMargin" id="UOC-Z9-m2z"/>
-                            <constraint firstItem="gBJ-pf-ESm" firstAttribute="top" secondItem="OAw-N3-kdb" secondAttribute="bottom" constant="8" id="VqA-58-QNc"/>
+                            <constraint firstItem="9ox-oK-0ip" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iAf-qM-afm" secondAttribute="leadingMargin" id="GBv-Ax-YG4"/>
+                            <constraint firstItem="gBJ-pf-ESm" firstAttribute="leading" secondItem="iAf-qM-afm" secondAttribute="leadingMargin" constant="-16" id="UOC-Z9-m2z"/>
+                            <constraint firstItem="gBJ-pf-ESm" firstAttribute="top" secondItem="OAw-N3-kdb" secondAttribute="bottom" constant="-20" id="VqA-58-QNc"/>
                             <constraint firstItem="Phh-Qz-nLq" firstAttribute="top" secondItem="gBJ-pf-ESm" secondAttribute="bottom" id="bmN-RO-EC5"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="gBJ-pf-ESm" secondAttribute="trailing" id="iVa-Qc-Nq2"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="gBJ-pf-ESm" secondAttribute="trailing" constant="-16" id="iVa-Qc-Nq2"/>
                             <constraint firstItem="9ox-oK-0ip" firstAttribute="centerX" secondItem="gBJ-pf-ESm" secondAttribute="centerX" id="j6d-34-BP5"/>
                             <constraint firstItem="9ox-oK-0ip" firstAttribute="top" secondItem="gBJ-pf-ESm" secondAttribute="bottom" constant="-62" id="mKL-Ji-uhT"/>
                             <constraint firstAttribute="trailingMargin" secondItem="9ox-oK-0ip" secondAttribute="trailing" constant="108" id="vQQ-e7-PFp"/>
@@ -289,7 +289,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L6s-jF-ZX2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3643.125" y="-279.92957746478874"/>
+            <point key="canvasLocation" x="3643" y="-280"/>
         </scene>
         <!--NagivationController1-->
         <scene sceneID="x6y-Qo-9ga">

@@ -13,7 +13,6 @@ class ShowLocViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var showMap: MKMapView!
     var date: String!
-    var uniqueKey: String!
     var appDelegate: AppDelegate!
     
     override func viewDidLoad() {
@@ -35,6 +34,9 @@ class ShowLocViewController: UIViewController, MKMapViewDelegate {
     {
         let locations = location
         var annotations = [MKPointAnnotation]()
+        let latDelta: CLLocationDegrees = 0.1
+        let lonDelta: CLLocationDegrees = 0.1
+        let span = MKCoordinateSpan(latitudeDelta: latDelta, longitudeDelta: lonDelta)
         
         for dictionary in locations {
             
@@ -50,7 +52,8 @@ class ShowLocViewController: UIViewController, MKMapViewDelegate {
                 // dictionary[Student.StudentResponseKey.Latitude] as! Double
                 // The lat and long are used to create a CLLocationCoordinates2D instance.
                 let coordinate = CLLocationCoordinate2D(latitude:CLLocationDegrees (lat as! Double), longitude: CLLocationDegrees(long as! Double))
-                
+                let region = MKCoordinateRegion(center: coordinate, span: span)
+                showMap.setRegion(region, animated: true)
                 // Here we create the annotation and set its coordiate, title, and subtitle properties
                 let annotation = MKPointAnnotation()
                 annotation.coordinate = coordinate
@@ -68,9 +71,7 @@ class ShowLocViewController: UIViewController, MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
         let reuseId = "pin"
-        
         var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
-        
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = true
@@ -98,53 +99,19 @@ class ShowLocViewController: UIViewController, MKMapViewDelegate {
     
     private func locationData() {
         
-        let methodParameters = ["where":"{\"\(Student.StudentResponseKey.UniqueKey)\":\"\(self.uniqueKey!)\"}"]
-        
-        /* 2/3. Build the URL, Configure the request */
-        let request = NSMutableURLRequest(url: appDelegate.tmdbURLFromParameters(methodParameters as [String:AnyObject], withPathExtension: ""))
-       // let url = URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!
-       //var request = URLRequest(url: url)
-        print(request)
-        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-        let session = URLSession.shared
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            
-            
-            /* GUARD: Was there an error? */
-            guard (error == nil) else {
-                print("There was an error with your request: \(error!)")
-                return
+        let parameters = ["where":"{\"\(Student.StudentResponseKey.UniqueKey)\":\"\(Student.Udacity.uniqueKey)\"}"]
+        Client.sharedInstance().taskForGETMethod(parameters: parameters as [String : AnyObject]) { (results, error) in
+            if let error = error {
+                print(error)
             }
-            
-            /* GUARD: Did we get a successful 2XX response? */
-            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-                print("Your request returned a status code other than 2xx!")
-                return
+            else {
+                if let finalResult = results!["results"] as? [[String: AnyObject]] {
+                    performUIUpdatesOnMain {
+                        self.addLocationOnMap(location: finalResult)
+                    }
+                }
             }
-            
-            /* GUARD: Was there any data returned? */
-            guard let data = data else {
-                print("No data was returned by the request!")
-                return
-            }
-            
-            /* 5. Parse the data */
-            let parsedResult: [String:AnyObject]!
-            do {
-                parsedResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
-                //   print("parsed\(parsedResult)")
-            } catch {
-                print("Could not parse the data as JSON: '\(data)'")
-                return
-            }
-            let result = (parsedResult["results"] as? [[String: AnyObject]])!
-            performUIUpdatesOnMain {
-                self.addLocationOnMap(location: result)
-            }
-            
         }
-        task.resume()
     }
     
     

@@ -30,54 +30,27 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-  //  func call() {
-        let url = URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!
-        var request = URLRequest(url: url)
-        
-        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { data, response, error in
-            
-            
-            /* GUARD: Was there an error? */
-            guard (error == nil) else {
-                print("There was an error with your request: \(error!)")
-                return
+        toGetData()
+    }
+    
+    func toGetData() {
+     
+        let parameters = ["limit": 100, "order": "-updatedAt"] as [String : AnyObject]
+        Client.sharedInstance().taskForGETMethod(parameters: parameters) { (results, error) in
+            if let error = error {
+                print(error)
             }
-            
-            /* GUARD: Did we get a successful 2XX response? */
-            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-                print("Your request returned a status code other than 2xx!")
-                return
-            }
-            
-            /* GUARD: Was there any data returned? */
-            guard let data = data else {
-                print("No data was returned by the request!")
-                return
-            }
-            
-            /* 5. Parse the data */
-            let parsedResult: [String:AnyObject]!
-            do {
-                parsedResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
-                //   print("parsed\(parsedResult)")
-            } catch {
-                print("Could not parse the data as JSON: '\(data)'")
-                return
-            }
-            let result = (parsedResult["results"] as? [[String: AnyObject]])!
-            performUIUpdatesOnMain {
-                self.result = result
-                self.mapViewTable.reloadData()
-                self.activityView.isHidden = true
-                self.activityView.stopAnimating()
-            }
-            
-        }
-        task.resume()
-        
+            else {
+                if let finalResult = results!["results"] as? [[String: AnyObject]] {
+                    performUIUpdatesOnMain {
+                        self.result = finalResult
+                        self.mapViewTable.reloadData()
+                        self.activityView.isHidden = true
+                        self.activityView.stopAnimating()
+                    }
+                  }
+               }
+         }
     }
     
     // MARK: Nav item Actions
@@ -85,9 +58,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     // MARK: Refresh Action
     
     @objc func refreshButtonAction() {
-        //   self.activityView.startAnimating()
-        // self.showUI(bol: false)
-        viewWillAppear(true)
+        toGetData()
     }
     
     // MARK: Add Location
@@ -106,68 +77,32 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                 resultVC.objectId = objectId
                 self.navigationController?.pushViewController(resultVC, animated: true)
             }))
-            //   self.present(alert, animated: true, completion: nil)
-            self.present(alert, animated: true) {
-                print(objectId)
-            }
+            self.present(alert, animated: true, completion: nil)
             
         }
         self.navigationController?.pushViewController(resultVC, animated: true)
-        /*      performUIUpdatesOnMain {
-         self.activityView.startAnimating()
-         self.showUI(bol: false)
-         } */
     }
     
     // MARK: Logout
     
     @objc func logout() {
-        var request = URLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
-        request.httpMethod = "DELETE"
-        var xsrfCookie: HTTPCookie? = nil
-        let sharedCookieStorage = HTTPCookieStorage.shared
-        for cookie in sharedCookieStorage.cookies! {
-            if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
-        }
-        if let xsrfCookie = xsrfCookie {
-            request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
-        }
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { data, response, error in
-            /* GUARD: Was there an error? */
-            guard (error == nil) else {
-                print("There was an error with your request: \(error!)")
-                return
-            }
-            
-            /* GUARD: Did we get a successful 2XX response? */
-            if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 {
-                UserDefaults.standard.removeObject(forKey: Student.StudentParameterKey.Id)
-                self.dismiss(animated: true, completion: nil)
-                
+        Client.sharedInstance().taskForDELETEMethod() { (results, error) in
+            if let error = error {
+                print(error)
             }
             else {
-                print("Your request returned a status code other than 2xx!")
+                if let finalResult = results![Student.StudentParameterKey.Session] as? [String: AnyObject] {
+                    if let _ = finalResult[Student.StudentParameterKey.Id] as? String {
+                        performUIUpdatesOnMain {
+                            UserDefaults.standard.removeObject(forKey: Student.StudentParameterKey.Id)
+                            self.dismiss(animated: true, completion: nil)
+                        }
+                    }
+                    
+                }
             }
-            
-            /* GUARD: Was there any data returned? */
-            guard let data = data else {
-                print("No data was returned by the request!")
-                return
-            }
-            let range = Range(5..<data.count)
-            let newData = data.subdata(in: range) /* subset response data! */
-            print(String(data: newData, encoding: .utf8)!)
-            /*   performUIUpdatesOnMain {
-             self.activityView.startAnimating()
-             self.showUI(bol: false)
-             } */
-            
         }
-        task.resume()
     }
-    
-    
 }
 
 // MARK: - ListViewController (UITableViewController)
@@ -197,9 +132,9 @@ extension ListViewController {
             detailTextLabel.text = "\(mediaURL)"
         }
         }
-    
     return cell!
     }
+    
     func canOpenURL(string: String?) -> Bool {
         guard let urlString = string else {return false}
         guard let url = NSURL(string: urlString) else {return false}
@@ -225,11 +160,11 @@ extension ListViewController {
             showAlert(msg: "Url not found")
         }
         }
+    
     func showAlert(msg:String){
         let alert = UIAlertController(title: "Alert", message: msg, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
-        
-           self.present(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
 }
 

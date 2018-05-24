@@ -23,7 +23,7 @@ class CustomNavController: UINavigationController {
     }
     // MARK: Nav item Actions
     
-    // MARK: Refresh Actio
+    // MARK: Refresh Action
     
     @objc func refreshButtonAction() {
         print("refresh")
