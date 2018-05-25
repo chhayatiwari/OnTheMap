@@ -91,6 +91,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                 print(error)
             }
             else {
+             //   UserDefaults.standard.removeObject(forKey: Student.StudentParameterKey.Id)
                 if let finalResult = results![Student.StudentParameterKey.Session] as? [String: AnyObject] {
                     if let _ = finalResult[Student.StudentParameterKey.Id] as? String {
                         performUIUpdatesOnMain {

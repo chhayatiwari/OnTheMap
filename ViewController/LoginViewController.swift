@@ -67,65 +67,32 @@ class LoginViewController: UIViewController {
     }
     
     private func getSessionId() {
-        
-        var request = URLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = "{\"udacity\": {\"username\":\"\(userNameText.text ?? "")\", \"password\":\"\(passwordText.text ?? "")\"}}".data(using: .utf8)
-        
-        let task = appDelegate.sharedSession.dataTask(with: request) { data, response, error in
+        Client.sharedInstance().taskForPOSTMethod(userName: userNameText.text!, passwordText: passwordText.text!) { (results, error) in
             
-            func displayError(error: String, debugLabelText: String? = nil) {
+            func displayError(errormsg: String, debugLabelText: String? = nil) {
                 performUIUpdatesOnMain {
                     self.setUIEnabled(true)
-                    self.labelView.text = error
+                    self.labelView.text = errormsg
                 }
             }
-            
-            /* GUARD: Was there an error? */
-            guard (error == nil) else {
-                displayError(error: "Error with Login")
+            if let errors = error {
+                displayError(errormsg: errors.userInfo[NSLocalizedDescriptionKey] as! String )
                 return
             }
-            
-            /* GUARD: Did we get a successful 2XX response? */
-            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-                displayError(error: "Error with the Login Credentials")
-                return
-            }
-            
-            /* GUARD: Was there any data returned? */
-            guard let data = data else {
-                displayError(error: "No data found")
-                return
-            }
-            
-            /* 5. Parse the data */
-            let range = Range(5..<data.count)
-            let newData = data.subdata(in: range) /* subset response data! */
-           
-            let parsedResult: [String:AnyObject]!
-            do {
-                parsedResult = try JSONSerialization.jsonObject(with: newData, options: .allowFragments) as! [String:AnyObject]
-            } catch {
-                print("Could not parse the data as JSON: '\(data)'")
-                return
-            }
-            guard let account = parsedResult[Student.StudentParameterKey.Account] as? [String: AnyObject] else {
-                displayError(error: "No account found")
+            guard let account = results![Student.StudentParameterKey.Account] as? [String: AnyObject] else {
+                displayError(errormsg: "No account found")
                 return
             }
             guard let key = account[Student.StudentParameterKey.UniqueId] as? String else {
-                displayError(error: "NO key to account")
+                displayError(errormsg: "No key to account")
                 return
             }
-            guard let session = parsedResult[Student.StudentParameterKey.Session] as? [String: AnyObject] else {
-                displayError(error: "No session")
+            guard let session = results![Student.StudentParameterKey.Session] as? [String: AnyObject] else {
+                displayError(errormsg: "No session")
                 return
             }
             guard let sessionID = session[Student.StudentParameterKey.Id] as? String else {
-                displayError(error: "No session Id")
+                displayError(errormsg: "No session Id")
                 return
             }
             UserDefaults.standard.set(sessionID, forKey:Student.StudentParameterKey.Id )
@@ -133,7 +100,6 @@ class LoginViewController: UIViewController {
             print(UserDefaults.standard.string(forKey: Student.StudentParameterKey.Id)!)
             self.completeLogin()
         }
-        task.resume()
     }
     
     private func completeLogin() {

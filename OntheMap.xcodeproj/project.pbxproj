@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		1806A0C620A45AD40004B02B /* ShowLocViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806A0C520A45AD40004B02B /* ShowLocViewController.swift */; };
 		184EDA3320AECBFC00CA96F9 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184EDA3220AECBFC00CA96F9 /* Client.swift */; };
-		18D1C41120A7077F0048F327 /* CustomNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D1C41020A7077F0048F327 /* CustomNavController.swift */; };
 		18E31CA720983C320024A59D /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E31CA620983C320024A59D /* MapViewController.swift */; };
 		18E31CA920983C5B0024A59D /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E31CA820983C5B0024A59D /* ListViewController.swift */; };
 		18E31CB3209868090024A59D /* OntheMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E31CB2209868090024A59D /* OntheMapTests.swift */; };
@@ -36,7 +35,6 @@
 /* Begin PBXFileReference section */
 		1806A0C520A45AD40004B02B /* ShowLocViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowLocViewController.swift; sourceTree = "<group>"; };
 		184EDA3220AECBFC00CA96F9 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
-		18D1C41020A7077F0048F327 /* CustomNavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomNavController.swift; path = ViewController/CustomNavController.swift; sourceTree = SOURCE_ROOT; };
 		18E31CA620983C320024A59D /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		18E31CA820983C5B0024A59D /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		18E31CB0209868090024A59D /* OntheMapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OntheMapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -120,7 +118,6 @@
 				18E31CA820983C5B0024A59D /* ListViewController.swift */,
 				18F249C420972E160028245F /* LoginViewController.swift */,
 				18E31CA620983C320024A59D /* MapViewController.swift */,
-				18D1C41020A7077F0048F327 /* CustomNavController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -248,7 +245,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				18F249C520972E160028245F /* LoginViewController.swift in Sources */,
-				18D1C41120A7077F0048F327 /* CustomNavController.swift in Sources */,
 				18F249D7209774100028245F /* GCDBlackBox.swift in Sources */,
 				18E31CA920983C5B0024A59D /* ListViewController.swift in Sources */,
 				18F249C320972E160028245F /* AppDelegate.swift in Sources */,

@@ -35,8 +35,7 @@ class GetDetailViewController: UIViewController {
     
    func showUI(bol:Bool ) {
     activityIndicator.isHidden = bol
-    let bol1 = !bol
-    buttonClick.isHidden = bol1
+    buttonClick.isHidden = !bol
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -69,7 +68,6 @@ class GetDetailViewController: UIViewController {
     func stringToGeocode() {
         self.activityIndicator.startAnimating()
         showUI(bol: false)
-       // let address = "1 Infinite Loop, Cupertino, CA 95014"
         let geoCoder = CLGeocoder()
         geoCoder.geocodeAddressString(locationString.text!) { (placemarks, error) in
             guard
@@ -77,6 +75,7 @@ class GetDetailViewController: UIViewController {
                 let location = placemarks.first?.location
                 else {
                     self.showAlert(msg: "No location found")
+                    self.showUI(bol: true)
                     return
             }
             let lat = location.coordinate.latitude
@@ -93,7 +92,8 @@ class GetDetailViewController: UIViewController {
        
         Client.sharedInstance().getUserDetail(uniqueId: uniqueId!) { (results, error) in
             if let error = error {
-                print(error)
+                self.showAlert(msg: error.userInfo[NSLocalizedDescriptionKey] as! String)
+                
             }
             else {
             if  let user = results![Student.StudentLocationKey.User] as? [String: AnyObject] {
@@ -119,7 +119,7 @@ class GetDetailViewController: UIViewController {
 
         Client.sharedInstance().addLocation(id: nil, first: first, last: last, locationString: locationString.text!, urlString: urlString.text!, lat: lat, lon: lon, method: "POST") { (results, error) in
             if let error = error {
-                print(error)
+                self.showAlert(msg: error.userInfo[NSLocalizedDescriptionKey] as! String)
             }
             else {
             if let result = results {
@@ -143,7 +143,7 @@ class GetDetailViewController: UIViewController {
         
         Client.sharedInstance().addLocation(id: id, first: first, last: last, locationString: locationString.text!, urlString: urlString.text!, lat: lat, lon: lon, method: "PUT") { (results, error) in
             if let error = error {
-                print(error)
+                self.showAlert(msg: error.userInfo[NSLocalizedDescriptionKey] as! String)
             }
             else {
             if let result = results {
@@ -176,7 +176,6 @@ extension GetDetailViewController: UITextFieldDelegate {
         func configureUI() {
             // configure background gradient
             let backgroundGradient = CAGradientLayer()
-            //     backgroundGradient.colors = [Constants.UI.LoginColorTop, Constants.UI.LoginColorBottom]
             backgroundGradient.locations = [0.0, 1.0]
             backgroundGradient.frame = view.frame
             view.layer.insertSublayer(backgroundGradient, at: 0)

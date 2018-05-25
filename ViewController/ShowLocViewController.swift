@@ -97,12 +97,18 @@ class ShowLocViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
+    func showAlert(msg: String) {
+        let alert = UIAlertController(title: "Alert", message: msg, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     private func locationData() {
         
         let parameters = ["where":"{\"\(Student.StudentResponseKey.UniqueKey)\":\"\(Student.Udacity.uniqueKey)\"}"]
         Client.sharedInstance().taskForGETMethod(parameters: parameters as [String : AnyObject]) { (results, error) in
             if let error = error {
-                print(error)
+                self.showAlert(msg: error.userInfo[NSLocalizedDescriptionKey] as! String)
             }
             else {
                 if let finalResult = results!["results"] as? [[String: AnyObject]] {

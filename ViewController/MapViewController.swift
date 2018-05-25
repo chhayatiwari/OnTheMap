@@ -88,13 +88,19 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             }
         }
     }
-   
+    
+    func showAlert(msg: String) {
+        let alert = UIAlertController(title: "Alert", message: msg, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     private func locationData() {
         
        let parameters = ["limit": 100, "order": "-updatedAt"] as [String : AnyObject]
         Client.sharedInstance().taskForGETMethod(parameters: parameters) { (results, error) in
             if let error = error {
-                print(error)
+               self.showAlert(msg: error.userInfo[NSLocalizedDescriptionKey] as! String)
             }
             else {
                 if let finalResult = results!["results"] as? [[String: AnyObject]] {

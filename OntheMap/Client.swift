@@ -28,8 +28,50 @@ class Client : NSObject {
     override init() {
         super.init()
 }
-
+// MARK: POST
+    
+    func taskForPOSTMethod(userName: String, passwordText: String, completionHandlerForPOST: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void)  {
+        var request = URLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = "{\"udacity\": {\"username\":\"\(userName)\", \"password\":\"\(passwordText)\"}}".data(using: .utf8)
+        let session = URLSession.shared
+        let task = session.dataTask(with: request) { data, response, error in
+        
+            func displayError(_ error: String) {
+                let userInfo = [NSLocalizedDescriptionKey : error]
+                completionHandlerForPOST(nil, NSError(domain: "taskForPOSTMethod", code: 1, userInfo: userInfo))
+            }
+            /* GUARD: Was there an error? */
+            guard (error == nil) else {
+                displayError("Failure to connect")
+                return
+            }
+            
+            /* GUARD: Did we get a successful 2XX response? */
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
+                displayError("Incorrect Login Credentials")
+                return
+            }
+            
+            /* GUARD: Was there any data returned? */
+            guard let data = data else {
+                displayError("No data found")
+                return
+            }
+            
+            /* 5. Parse the data */
+            let range = Range(5..<data.count)
+            let newData = data.subdata(in: range) /* subset response data! */
+            
+            self.convertDataWithCompletionHandler(newData, completionHandlerForConvertData: completionHandlerForPOST)
+        }
+        task.resume()
+    }
+    
 // MARK: GET
+    
     func taskForGETMethod(parameters: [String:AnyObject], completionHandlerForGET: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void)  {
     
         let url = tmdbURLFromParameters(parameters as [String : AnyObject] , withPathExtension: "")
@@ -39,20 +81,25 @@ class Client : NSObject {
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
             
+            func displayError(_ error: String) {
+                let userInfo = [NSLocalizedDescriptionKey : error]
+                completionHandlerForGET(nil, NSError(domain: "taskForGETMethod", code: 1, userInfo: userInfo))
+            }
             /* GUARD: Was there an error? */
             guard (error == nil) else {
-                print("There was an error with your request: \(error!)")
+                displayError("There was an error with your request: \(error!)")
                 return
             }
             
             /* GUARD: Did we get a successful 2XX response? */
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-                print("Your request returned a status code other than 2xx!")
+                displayError("Your request returned a status code other than 2xx!")
                 return
             }
             
             /* GUARD: Was there any data returned? */
             guard let data = data else {
+                displayError("No data")
                 return
             }
             
@@ -76,19 +123,25 @@ class Client : NSObject {
         }
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
+            func displayError(_ error: String) {
+                let userInfo = [NSLocalizedDescriptionKey : error]
+                completionHandlerForDELETE(nil, NSError(domain: "taskForDELETEMethod", code: 1, userInfo: userInfo))
+            }
             /* GUARD: Was there an error? */
             guard (error == nil) else {
-                print("There was an error with your request: \(error!)")
+                displayError("Internet Connection failed \(error!)")
                 return
             }
             
             /* GUARD: Did we get a successful 2XX response? */
-            if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 {
-                UserDefaults.standard.removeObject(forKey: Student.StudentParameterKey.Id)
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
+                displayError("Logout Failed")
+                return
             }
             
             /* GUARD: Was there any data returned? */
             guard let data = data else {
+                displayError("No data Found")
                 return
             }
             let range = Range(5..<data.count)
@@ -103,21 +156,26 @@ class Client : NSObject {
         let request = URLRequest(url: URL(string: "https://www.udacity.com/api/users/\(uniqueId)")!)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
+            
+            func displayError(_ error: String) {
+                let userInfo = [NSLocalizedDescriptionKey : error]
+                completionHandlerForGETuser(nil, NSError(domain: "getUserDetail", code: 1, userInfo: userInfo))
+            }
             /* GUARD: Was there an error? */
             guard (error == nil) else {
-                print("There was an error with your request: \(error!)")
+                displayError("There was an error with your request: \(error!)")
                 return
             }
             
             /* GUARD: Did we get a successful 2XX response? */
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-                print("Your request returned a status code other than 2xx!")
+                displayError("Your request returned a status code other than 2xx!")
                 return
             }
             
             /* GUARD: Was there any data returned? */
             guard let data = data else {
-                print("No data was returned by the request!")
+                displayError("No data was returned by the request!")
                 return
             }
             let range = Range(5..<data.count)
@@ -145,20 +203,25 @@ class Client : NSObject {
         request.httpBody = "{\"uniqueKey\": \"\(Student.Udacity.uniqueKey)\", \"firstName\": \"\(first)\", \"lastName\": \"\(last)\",\"mapString\": \"\(locationString)\", \"mediaURL\": \"\(urlString)\",\"latitude\": \(lat), \"longitude\": \(lon)}".data(using: .utf8)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
+            
+            func displayError(_ error: String) {
+                let userInfo = [NSLocalizedDescriptionKey : error]
+                completionHandlerForAddLoc(nil, NSError(domain: "addLocation", code: 1, userInfo: userInfo))
+            }
             guard (error == nil) else {
-                print("There was an error with your request: \(error!)")
+                displayError("Location Not Loaded \(error!)")
                 return
             }
             
             /* GUARD: Did we get a successful 2XX response? */
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-                print("Your request returned a status code other than 2xx!")
+                displayError("No such Location Posted")
                 return
             }
             
             /* GUARD: Was there any data returned? */
             guard let data = data else {
-                print("No data was returned by the request!")
+                displayError("No data")
                 return
             }
             
@@ -167,10 +230,6 @@ class Client : NSObject {
     }
     task.resume()
 }
-
-    private func convertWithCompletionHandler(_ data: Data, completionHandlerForConvertData: (_ result: AnyObject?, _ error: NSError?) -> Void) {
-        
-    }
 
     private func convertDataWithCompletionHandler(_ data: Data, completionHandlerForConvertData: (_ result: AnyObject?, _ error: NSError?) -> Void) {
         
