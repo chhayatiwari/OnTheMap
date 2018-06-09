@@ -13,6 +13,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var activityView: UIActivityIndicatorView!
     var appDelegate: AppDelegate!
     var result: [[String: AnyObject]] = []
+     var student:[StudentInformation] = [StudentInformation]()
     @IBOutlet weak var mapViewTable: UITableView!
     
     override func viewDidLoad() {
@@ -42,6 +43,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
             else {
                 if let finalResult = results!["results"] as? [[String: AnyObject]] {
+                    self.student = StudentInformation.dataFromResults(finalResult)
                     performUIUpdatesOnMain {
                         self.result = finalResult
                         self.mapViewTable.reloadData()
@@ -110,30 +112,25 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
 
 extension ListViewController {
     
-     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return result.count
     }
     
      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellReuseIdentifier = "StudentDetail"
-        let list = result[(indexPath as NSIndexPath).row]
-        
+        let list = student[(indexPath as NSIndexPath).row]
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as UITableViewCell?
-        if let _ = list[Student.StudentResponseKey.Latitude],
-            let _ = list[Student.StudentResponseKey.Longitude],
-            let first = list[Student.StudentResponseKey.FirstName] as? String,
-            let last = list[Student.StudentResponseKey.LastName] as? String,
-            let mediaURL = list[Student.StudentResponseKey.MediaUrl] as? String
-        {
-        cell?.textLabel!.text = "\(first) \(last)"
+        
+        cell?.textLabel!.text = "\(list.first) \(list.first)"
         cell?.imageView!.image = UIImage(named: "icon_pin")
         cell?.imageView!.contentMode = UIViewContentMode.scaleAspectFit
         
-        if let detailTextLabel = cell?.detailTextLabel {
-            detailTextLabel.text = "\(mediaURL)"
-        }
+        if let detailTextLabel = cell?.detailTextLabel,
+           let media = list.mediaURL {
+            detailTextLabel.text = media
         }
     return cell!
+        
     }
     
     func canOpenURL(string: String?) -> Bool {
@@ -146,12 +143,11 @@ extension ListViewController {
     }
     
      func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-         let list = result[(indexPath as NSIndexPath).row]
-       // print(list)
+         let list = student[(indexPath as NSIndexPath).row]
         
-        if let urlString = list[Student.StudentResponseKey.MediaUrl] as? String {
-            if canOpenURL(string: urlString) {
-                UIApplication.shared.open( URL(string: urlString)! , options: [:], completionHandler: nil)
+        if let media = list.mediaURL{
+            if canOpenURL(string: media) {
+                UIApplication.shared.open( URL(string: media)! , options: [:], completionHandler: nil)
                 }
             else{
                 showAlert(msg: "URL Invalid")

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1806A0C620A45AD40004B02B /* ShowLocViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806A0C520A45AD40004B02B /* ShowLocViewController.swift */; };
+		183F69E520CC15C8007A19BE /* StudentInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183F69E420CC15C8007A19BE /* StudentInformation.swift */; };
 		184EDA3320AECBFC00CA96F9 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184EDA3220AECBFC00CA96F9 /* Client.swift */; };
 		18E31CA720983C320024A59D /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E31CA620983C320024A59D /* MapViewController.swift */; };
 		18E31CA920983C5B0024A59D /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E31CA820983C5B0024A59D /* ListViewController.swift */; };
@@ -34,6 +35,7 @@
 
 /* Begin PBXFileReference section */
 		1806A0C520A45AD40004B02B /* ShowLocViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowLocViewController.swift; sourceTree = "<group>"; };
+		183F69E420CC15C8007A19BE /* StudentInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentInformation.swift; sourceTree = "<group>"; };
 		184EDA3220AECBFC00CA96F9 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		18E31CA620983C320024A59D /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		18E31CA820983C5B0024A59D /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 				18F249C220972E160028245F /* AppDelegate.swift */,
 				18F249D6209774100028245F /* GCDBlackBox.swift */,
 				18F249D8209778F00028245F /* Student.swift */,
+				183F69E420CC15C8007A19BE /* StudentInformation.swift */,
 			);
 			path = OntheMap;
 			sourceTree = "<group>";
@@ -252,6 +255,7 @@
 				18E31CBB209B75A70024A59D /* GetDetailViewController.swift in Sources */,
 				18E31CA720983C320024A59D /* MapViewController.swift in Sources */,
 				184EDA3320AECBFC00CA96F9 /* Client.swift in Sources */,
+				183F69E520CC15C8007A19BE /* StudentInformation.swift in Sources */,
 				18F249D9209778F00028245F /* Student.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

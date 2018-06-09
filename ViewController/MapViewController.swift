@@ -11,9 +11,11 @@ import MapKit
 
 class MapViewController: UIViewController, MKMapViewDelegate {
 
+    var student:[StudentInformation] = [StudentInformation]()
     var appDelegate: AppDelegate!
     @IBOutlet weak var mapView: MKMapView!
    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -23,7 +25,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshButtonAction))
         
         navigationItem.rightBarButtonItems = [addButton, refreshButton]
-     //   self.activityView.stopAnimating()
       }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -104,6 +105,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             }
             else {
                 if let finalResult = results!["results"] as? [[String: AnyObject]] {
+                    self.student = StudentInformation.dataFromResults(finalResult)
                 performUIUpdatesOnMain {
                     self.addLocationOnMap(location: finalResult)
                     }
