@@ -10,10 +10,13 @@
 		1806A0C620A45AD40004B02B /* ShowLocViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1806A0C520A45AD40004B02B /* ShowLocViewController.swift */; };
 		183F69E520CC15C8007A19BE /* StudentInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183F69E420CC15C8007A19BE /* StudentInformation.swift */; };
 		184EDA3320AECBFC00CA96F9 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184EDA3220AECBFC00CA96F9 /* Client.swift */; };
+		18C375FB20D0582100FAE703 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C375FA20D0582100FAE703 /* APIManager.swift */; };
 		18E31CA720983C320024A59D /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E31CA620983C320024A59D /* MapViewController.swift */; };
 		18E31CA920983C5B0024A59D /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E31CA820983C5B0024A59D /* ListViewController.swift */; };
 		18E31CB3209868090024A59D /* OntheMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E31CB2209868090024A59D /* OntheMapTests.swift */; };
 		18E31CBB209B75A70024A59D /* GetDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E31CBA209B75A70024A59D /* GetDetailViewController.swift */; };
+		18E6B71D20CD9911009DBB1D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E6B71C20CD9911009DBB1D /* TabBarViewController.swift */; };
+		18E6B71F20CDA4AD009DBB1D /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E6B71E20CDA4AD009DBB1D /* UserManager.swift */; };
 		18F249C320972E160028245F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F249C220972E160028245F /* AppDelegate.swift */; };
 		18F249C520972E160028245F /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F249C420972E160028245F /* LoginViewController.swift */; };
 		18F249C820972E160028245F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18F249C620972E160028245F /* Main.storyboard */; };
@@ -37,12 +40,15 @@
 		1806A0C520A45AD40004B02B /* ShowLocViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowLocViewController.swift; sourceTree = "<group>"; };
 		183F69E420CC15C8007A19BE /* StudentInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentInformation.swift; sourceTree = "<group>"; };
 		184EDA3220AECBFC00CA96F9 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
+		18C375FA20D0582100FAE703 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		18E31CA620983C320024A59D /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		18E31CA820983C5B0024A59D /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		18E31CB0209868090024A59D /* OntheMapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OntheMapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		18E31CB2209868090024A59D /* OntheMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OntheMapTests.swift; sourceTree = "<group>"; };
 		18E31CB4209868090024A59D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		18E31CBA209B75A70024A59D /* GetDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetDetailViewController.swift; sourceTree = "<group>"; };
+		18E6B71C20CD9911009DBB1D /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
+		18E6B71E20CDA4AD009DBB1D /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		18F249BF20972E160028245F /* OntheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OntheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18F249C220972E160028245F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		18F249C420972E160028245F /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -104,7 +110,9 @@
 		18F249C120972E160028245F /* OntheMap */ = {
 			isa = PBXGroup;
 			children = (
+				18E6B71E20CDA4AD009DBB1D /* UserManager.swift */,
 				184EDA3220AECBFC00CA96F9 /* Client.swift */,
+				18C375FA20D0582100FAE703 /* APIManager.swift */,
 				18F249C220972E160028245F /* AppDelegate.swift */,
 				18F249D6209774100028245F /* GCDBlackBox.swift */,
 				18F249D8209778F00028245F /* Student.swift */,
@@ -121,6 +129,7 @@
 				18E31CA820983C5B0024A59D /* ListViewController.swift */,
 				18F249C420972E160028245F /* LoginViewController.swift */,
 				18E31CA620983C320024A59D /* MapViewController.swift */,
+				18E6B71C20CD9911009DBB1D /* TabBarViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -249,12 +258,15 @@
 			files = (
 				18F249C520972E160028245F /* LoginViewController.swift in Sources */,
 				18F249D7209774100028245F /* GCDBlackBox.swift in Sources */,
+				18E6B71D20CD9911009DBB1D /* TabBarViewController.swift in Sources */,
 				18E31CA920983C5B0024A59D /* ListViewController.swift in Sources */,
 				18F249C320972E160028245F /* AppDelegate.swift in Sources */,
 				1806A0C620A45AD40004B02B /* ShowLocViewController.swift in Sources */,
+				18E6B71F20CDA4AD009DBB1D /* UserManager.swift in Sources */,
 				18E31CBB209B75A70024A59D /* GetDetailViewController.swift in Sources */,
 				18E31CA720983C320024A59D /* MapViewController.swift in Sources */,
 				184EDA3320AECBFC00CA96F9 /* Client.swift in Sources */,
+				18C375FB20D0582100FAE703 /* APIManager.swift in Sources */,
 				183F69E520CC15C8007A19BE /* StudentInformation.swift in Sources */,
 				18F249D9209778F00028245F /* Student.swift in Sources */,
 			);

@@ -19,12 +19,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         appDelegate = UIApplication.shared.delegate as! AppDelegate
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logout))
-        
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(plusButtonAction))
-        let refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshButtonAction))
-        
-        navigationItem.rightBarButtonItems = [addButton, refreshButton]
       }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -33,34 +27,16 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         locationData()
     }
   
-    func addLocationOnMap(location:[[String:Any]])
-    {
-        let locations = location
-        var annotations = [MKPointAnnotation]()
-        
-        for dictionary in locations {
-            // Notice that the float values are being used to create CLLocationDegree values.
-            // This is a version of the Double type.
-            if let lat = dictionary[Student.StudentResponseKey.Latitude] as? Double ,
-               let long = dictionary[Student.StudentResponseKey.Longitude] as? Double,
-               let first = dictionary[Student.StudentResponseKey.FirstName] as? String,
-               let last = dictionary[Student.StudentResponseKey.LastName] as? String,
-               let mediaURL = dictionary[Student.StudentResponseKey.MediaUrl] as? String
-           {
-            // The lat and long are used to create a CLLocationCoordinates2D instance.
-            let coordinate = CLLocationCoordinate2D(latitude:CLLocationDegrees (lat), longitude: CLLocationDegrees(long))
-            
-            // Here we create the annotation and set its coordiate, title, and subtitle properties
-            let annotation = MKPointAnnotation() 
-            annotation.coordinate = coordinate
-            annotation.title = "\(first) \(last)"
-            annotation.subtitle = mediaURL
-            
-            // Finally we place the annotation in an array of annotations.
-            annotations.append(annotation)
-            }
+    private func showLocations(_ locations: [StudentInformation]) {
+        mapView.removeAnnotations(mapView.annotations)
+        for location in locations where location.lat != nil && location.long != nil {
+            let annotation = MKPointAnnotation()
+            annotation.title = (location.first == nil ? "" : "\(location.first!) ") + (location.last == nil ? "" : "\(location.last!) ")
+            annotation.subtitle = location.mediaURL
+            annotation.coordinate = CLLocationCoordinate2DMake(location.lat!, location.long!)
+            mapView.addAnnotation(annotation)
         }
-        mapView.addAnnotations(annotations)
+        mapView.showAnnotations(mapView.annotations, animated: true)
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -85,9 +61,24 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         if control == view.rightCalloutAccessoryView {
             let app = UIApplication.shared
             if let toOpen = view.annotation?.subtitle! {
-                app.open(URL(string: toOpen)!, options: [:], completionHandler: nil)
+               // app.open(URL(string: toOpen)!, options: [:], completionHandler: nil)
+                if canOpenURL(string: toOpen) {
+                    UIApplication.shared.open( URL(string: toOpen)! , options: [:], completionHandler: nil)
+                }
+                else{
+                    showAlert(msg: "URL Invalid")
+                }
             }
         }
+    }
+    
+    func canOpenURL(string: String?) -> Bool {
+        guard let urlString = string else {return false}
+        guard let url = NSURL(string: urlString) else {return false}
+        if !UIApplication.shared.canOpenURL(url as URL) {return false}
+        let regEx = "((https|http)://)((\\w|-)+)(([.]|[/])((\\w|-)+))+"
+        let predicate = NSPredicate(format:"SELF MATCHES %@", argumentArray:[regEx])
+        return predicate.evaluate(with: string)
     }
     
     func showAlert(msg: String) {
@@ -96,7 +87,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         self.present(alert, animated: true, completion: nil)
     }
     
-    private func locationData() {
+    func locationData() {
         
        let parameters = ["limit": 100, "order": "-updatedAt"] as [String : AnyObject]
         Client.sharedInstance().taskForGETMethod(parameters: parameters) { (results, error) in
@@ -107,61 +98,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 if let finalResult = results!["results"] as? [[String: AnyObject]] {
                     self.student = StudentInformation.dataFromResults(finalResult)
                 performUIUpdatesOnMain {
-                    self.addLocationOnMap(location: finalResult)
+                    self.showLocations(self.student)
                     }
                 }
         }
         }
     }
-    
-    // MARK: Nav item Actions
-    
-    // MARK: Refresh Action
     
     @objc func refreshButtonAction() {
        locationData()
     }
-    
-    // MARK: Add Location
-    
-    @objc func plusButtonAction() {
-        
-        let storyboard = UIStoryboard (name: "Main", bundle: nil)
-        let resultVC = storyboard.instantiateViewController(withIdentifier: "GetDetailViewController")as! GetDetailViewController
-        // Communicate the match
-        if let objectId = UserDefaults.standard.string(forKey: Student.StudentResponseKey.ObjectId) {
-            
-            let msg = "Data already exist, do you want to overwrite"
-            let alert = UIAlertController(title: "Alert", message: msg, preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive, handler: nil))
-            alert.addAction(UIAlertAction(title: "Overwrite", style: UIAlertActionStyle.cancel, handler: { (alert: UIAlertAction!) in
-                resultVC.objectId = objectId
-                self.navigationController?.pushViewController(resultVC, animated: true)
-            }))
-            present(alert, animated: true, completion: nil)
-           
-        }
-        navigationController?.pushViewController(resultVC, animated: true)
-    }
-    
-    // MARK: Logout
-    
-    @objc func logout() {
-      Client.sharedInstance().taskForDELETEMethod() { (results, error) in
-                if let error = error {
-                    print(error)
-                }
-                else {
-                    if let finalResult = results![Student.StudentParameterKey.Session] as? [String: AnyObject] {
-                        if let _ = finalResult[Student.StudentParameterKey.Id] as? String {
-                            performUIUpdatesOnMain {
-                                UserDefaults.standard.removeObject(forKey: Student.StudentParameterKey.Id)
-                                self.dismiss(animated: true, completion: nil)
-                                }
-                        }
-                        
-                    }
-                }
-    }
-    }
+   
 }

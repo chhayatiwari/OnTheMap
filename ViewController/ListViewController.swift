@@ -18,15 +18,6 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       // self.call()
-        appDelegate = UIApplication.shared.delegate as! AppDelegate
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logout))
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(plusButtonAction))
-        let refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshButtonAction))
-        
-        self.navigationItem.rightBarButtonItems = [addButton, refreshButton]
-        
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,58 +45,6 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                }
          }
     }
-    
-    // MARK: Nav item Actions
-    
-    // MARK: Refresh Action
-    
-    @objc func refreshButtonAction() {
-        toGetData()
-    }
-    
-    // MARK: Add Location
-    
-    @objc func plusButtonAction() {
-        
-        let storyboard = UIStoryboard (name: "Main", bundle: nil)
-        let resultVC = storyboard.instantiateViewController(withIdentifier: "GetDetailViewController")as! GetDetailViewController
-        // Communicate the match
-        if let objectId = UserDefaults.standard.string(forKey: Student.StudentResponseKey.ObjectId) {
-            
-            let msg = "Data already exist, do you want to overwrite"
-            let alert = UIAlertController(title: "Alert", message: msg, preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive, handler: nil))
-            alert.addAction(UIAlertAction(title: "Overwrite", style: UIAlertActionStyle.cancel, handler: { (alert: UIAlertAction!) in
-                resultVC.objectId = objectId
-                self.navigationController?.pushViewController(resultVC, animated: true)
-            }))
-            self.present(alert, animated: true, completion: nil)
-            
-        }
-        self.navigationController?.pushViewController(resultVC, animated: true)
-    }
-    
-    // MARK: Logout
-    
-    @objc func logout() {
-        Client.sharedInstance().taskForDELETEMethod() { (results, error) in
-            if let error = error {
-                print(error)
-            }
-            else {
-             //   UserDefaults.standard.removeObject(forKey: Student.StudentParameterKey.Id)
-                if let finalResult = results![Student.StudentParameterKey.Session] as? [String: AnyObject] {
-                    if let _ = finalResult[Student.StudentParameterKey.Id] as? String {
-                        performUIUpdatesOnMain {
-                            UserDefaults.standard.removeObject(forKey: Student.StudentParameterKey.Id)
-                            self.dismiss(animated: true, completion: nil)
-                        }
-                    }
-                    
-                }
-            }
-        }
-    }
 }
 
 // MARK: - ListViewController (UITableViewController)
@@ -120,14 +59,15 @@ extension ListViewController {
         let cellReuseIdentifier = "StudentDetail"
         let list = student[(indexPath as NSIndexPath).row]
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as UITableViewCell?
-        
-        cell?.textLabel!.text = "\(list.first) \(list.first)"
+        if let detailTextLabel = cell?.detailTextLabel,
+            let media = list.mediaURL {
+        if let f = list.first,
+            let l = list.last {
+        cell?.textLabel!.text = "\(f) \(l)"
         cell?.imageView!.image = UIImage(named: "icon_pin")
         cell?.imageView!.contentMode = UIViewContentMode.scaleAspectFit
-        
-        if let detailTextLabel = cell?.detailTextLabel,
-           let media = list.mediaURL {
-            detailTextLabel.text = media
+             detailTextLabel.text = media
+        }
         }
     return cell!
         

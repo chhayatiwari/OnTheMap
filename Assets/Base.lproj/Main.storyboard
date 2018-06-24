@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -54,6 +54,11 @@
                                         <state key="normal" title="LOGIN">
                                             <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="10"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="loginAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vAp-U7-zLp"/>
                                         </connections>
@@ -107,12 +112,47 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-202" y="25"/>
+            <point key="canvasLocation" x="-2196" y="-1"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="SLc-ad-ZFy">
+            <objects>
+                <navigationController storyboardIdentifier="LoginNavViewController" id="0X9-0a-Leg" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="QFh-qA-2uG">
+                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="32p-Wu-eNc" kind="relationship" relationship="rootViewController" id="0Gw-Ey-IYP"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zhE-r6-Lhz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1376" y="-1"/>
         </scene>
         <!--Map Tab Bar Controller-->
         <scene sceneID="3X8-QB-j19">
             <objects>
-                <tabBarController storyboardIdentifier="MapTabBarController" id="32p-Wu-eNc" userLabel="Map Tab Bar Controller" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarViewController" id="32p-Wu-eNc" userLabel="Map Tab Bar Controller" customClass="TabBarViewController" customModule="OntheMap" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="kjz-x2-vtS">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="b9x-0J-2fY">
+                            <connections>
+                                <action selector="logoutAction:" destination="32p-Wu-eNc" id="LNQ-nJ-L4j"/>
+                            </connections>
+                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="A1M-ui-VfN">
+                                <connections>
+                                    <action selector="addLocationAction:" destination="32p-Wu-eNc" id="3ul-QY-vH1"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="refresh" id="GIt-6d-5Ds">
+                                <connections>
+                                    <action selector="refreshAction:" destination="32p-Wu-eNc" id="cVg-FJ-QUW"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
+                    </navigationItem>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionIndicatorImage="icon_mapview-selected" id="sTl-qp-6oZ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -125,7 +165,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Kd-NK-f4r" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="484" y="25"/>
+            <point key="canvasLocation" x="-418" y="-1"/>
         </scene>
         <!--Navigation Controller2-->
         <scene sceneID="3k9-4x-NTv">
@@ -142,7 +182,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gcv-v5-ovD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1257" y="545"/>
+            <point key="canvasLocation" x="782" y="485"/>
         </scene>
         <!--MapViewController-->
         <scene sceneID="Aot-pL-o6g">
@@ -151,6 +191,9 @@
                     <mapView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" id="euu-tP-Bo9">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <connections>
+                            <outlet property="delegate" destination="kjq-pi-m8n" id="iBa-eI-dx8"/>
+                        </connections>
                     </mapView>
                     <navigationItem key="navigationItem" title="On the Map" id="eiN-MQ-yiC"/>
                     <connections>
@@ -159,7 +202,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3tc-iB-0sY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2121" y="-279"/>
+            <point key="canvasLocation" x="1691" y="-183"/>
         </scene>
         <!--Get Detail View Controller-->
         <scene sceneID="K7s-Gb-9xU">
@@ -194,6 +237,11 @@
                                 <state key="normal" title="Find Location">
                                     <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="showInMap:" destination="Kyn-z3-KZ9" eventType="touchUpInside" id="vjZ-iU-dzr"/>
                                 </connections>
@@ -242,7 +290,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jzc-DH-Tuk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3013.5999999999999" y="-279.31034482758622"/>
+            <point key="canvasLocation" x="2644" y="-78"/>
         </scene>
         <!--Show Loc View Controller-->
         <scene sceneID="f58-Mi-tc6">
@@ -258,6 +306,9 @@
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="gBJ-pf-ESm">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <connections>
+                                    <outlet property="delegate" destination="pfA-kt-zx6" id="oiX-Iv-1pJ"/>
+                                </connections>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9ox-oK-0ip">
                                 <rect key="frame" x="124" y="506" width="72" height="42"/>
@@ -289,7 +340,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L6s-jF-ZX2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3643" y="-280"/>
+            <point key="canvasLocation" x="3450" y="-78"/>
         </scene>
         <!--NagivationController1-->
         <scene sceneID="x6y-Qo-9ga">
@@ -309,7 +360,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eLD-sC-ze6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1258" y="-233"/>
+            <point key="canvasLocation" x="782" y="-220"/>
         </scene>
         <!--ListViewController-->
         <scene sceneID="NKN-E9-CQt">
@@ -350,6 +401,11 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="10"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -388,7 +444,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gjf-XG-Ph3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2149.5999999999999" y="393.55322338830587"/>
+            <point key="canvasLocation" x="1693" y="485"/>
         </scene>
     </scenes>
     <resources>

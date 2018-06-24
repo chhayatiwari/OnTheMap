@@ -13,8 +13,8 @@ struct StudentInformation {
     
     let lat:Double?
     let long:Double?
-    let first:String
-    let last:String
+    let first:String?
+    let last:String?
     let mediaURL:String?
     
     // MARK: Initializers
@@ -22,8 +22,8 @@ struct StudentInformation {
     init(dictionary: [String:AnyObject]) {
         lat = (dictionary[Student.StudentResponseKey.Latitude] as? Double)
         long = (dictionary[Student.StudentResponseKey.Longitude] as? Double)
-        first = (dictionary[Student.StudentResponseKey.FirstName] as? String)!
-        last = (dictionary[Student.StudentResponseKey.LastName] as? String)!
+        first = (dictionary[Student.StudentResponseKey.FirstName] as? String)
+        last = (dictionary[Student.StudentResponseKey.LastName] as? String)
         mediaURL = (dictionary[Student.StudentResponseKey.MediaUrl] as? String)
     }
     
